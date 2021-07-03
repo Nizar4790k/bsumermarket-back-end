@@ -29,7 +29,6 @@ const handleRegister = async (req, res, database, bcrypt) => {
     try {
 
 
-
         if (!client) {
             res.status(500).json("ERROR IN THE SERVER");
             return
