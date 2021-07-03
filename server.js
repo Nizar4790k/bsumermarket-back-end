@@ -1,11 +1,35 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const mongodb = require('mongodb');
+const register = require('./controllers/register');
+const bcrypt= require('bcrypt');
+const dotenv = require("dotenv");
+dotenv.config()
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.use(cors());
 
-app.listen(3001,()=>{
-    console.log(`Server running on port: 3001`);
+
+
+
+
+app.post
+
+app.listen(process.env.PORT|| 3001,()=>{
+    console.log(`Server running on port: ${process.env.PORT || 3001}`);
 })
+
+
+const db = {
+    MongoClient: mongodb.MongoClient, 
+    url:process.env.MONGODB_URI,// URL at which MongoDB service is running
+    dbName:process.env.DB_NAME // A Client to MongoDB
+}
+
+app.post('/register', (req, res) => {
+    
+    register.handleRegister(req,res,db,bcrypt)
+})
+
