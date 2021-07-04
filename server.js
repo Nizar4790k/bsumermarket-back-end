@@ -51,3 +51,7 @@ app.post('/cart',(req,res)=>{
 app.put('/cart',(req,res)=>{
     cart.removeProduct(req,res,db);
 });
+
+app.post('/checkproductcart',(req,res)=>{
+    cart.checkProduct(req,res,db)
+})

@@ -72,6 +72,56 @@ const removeProduct = async (req,res,database)=>{
     
 }
 
+const checkProduct=  async (req,res,database)=>{
+    const{userId,product} = req.body;
+    
+    const id = product._id;
+
+    if(!product && !userId){
+        return res.status(400).json({status:"EMPTY_BODY"});
+    }
+
+    const { MongoClient, url, dbName } = database;
+    
+    const client = await MongoClient.connect(url, { useNewUrlParser: true })
+        .catch(err => { console.log(err); });
+
+        try{
+            const db = client.db(dbName);
+            let collection = db.collection("cart");
+        
+            var isFound =  await checkUser(userId,collection)
+            let result= null;
+            
+            if(isFound){
+                result = await collection.find({userId:userId});
+                
+                const cart = await result.toArray();
+ 
+                
+                const products = cart[0].products.filter(function(product){
+                    return product._id===id;
+                })
+                
+
+                if(products[0]){
+                    return res.json({isInCart:true});
+
+                }else{
+                    return res.json({isInCart:false});
+                }
+                
+                
+            }
+            
+        
+        }catch(err){
+            console.log(err);
+            return res.json({status:"ERROR_WHEN_CHECKING CART"})
+        }
+
+}
+
 async function checkUser(userId, collection) {
 
     try {
@@ -91,5 +141,6 @@ async function checkUser(userId, collection) {
 
 module.exports = {
     addProduct: addProduct,
-    removeProduct:removeProduct
+    removeProduct:removeProduct,
+    checkProduct:checkProduct
 };
