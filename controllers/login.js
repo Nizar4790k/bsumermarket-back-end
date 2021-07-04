@@ -37,7 +37,8 @@ const handleLogin = async function(req,res,database,bcrypt){
     let value = bcrypt.compareSync(user.password,result.password);
 
     if(value){
-        res.json({status:"ACCESS_GRANTED",fullName:result.fullName})
+        console.log(result.name)
+        res.json({status:"ACCESS_GRANTED",user:{fullName:result.fullName,id:result._id}})
         
     }else{
         res.json({status:"ACCESS_DENIED"});

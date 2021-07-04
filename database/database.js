@@ -59,7 +59,9 @@ db.getCollection("products").insertMany([
         "discount": 0.08
     }]);
 
-db.getCollection("products").find({"name":/^Man/});
+db.getCollection("products").find({"name":/^Manzana/});
+
+db.getCollection("cart").find({});
 
 
 

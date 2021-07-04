@@ -5,6 +5,7 @@ const mongodb = require('mongodb');
 const register = require('./controllers/register');
 const products = require('./controllers/products');
 const login = require('./controllers/login');
+const cart = require('./controllers/cart');
 const bcrypt= require('bcrypt');
 const dotenv = require("dotenv");
 dotenv.config()
@@ -12,7 +13,6 @@ dotenv.config()
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.use(cors());
-
 
 
 
@@ -29,17 +29,25 @@ const db = {
     MongoClient: mongodb.MongoClient, 
     url:process.env.MONGODB_URI,// URL at which MongoDB service is running
     dbName:process.env.DB_NAME // A Client to MongoDB
-}
+};
 
 app.post('/register', (req, res) => {
     
     register.handleRegister(req,res,db,bcrypt)
-})
+});
 
 app.post('/login',(req,res)=>{
     login.handleLogin(req,res,db,bcrypt);
-})
+});
 
 app.get('/products',(req,res)=>{
     products.getProducts(req,res,db);
+});
+
+app.post('/cart',(req,res)=>{
+    cart.addProduct(req,res,db)
 })
+
+app.put('/cart',(req,res)=>{
+    cart.removeProduct(req,res,db);
+});
