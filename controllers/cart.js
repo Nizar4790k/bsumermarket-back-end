@@ -66,18 +66,15 @@ const removeProduct = async (req,res,database)=>{
         }
 
     
-
-       
-
     
 }
 
-const checkProduct=  async (req,res,database)=>{
-    const{userId,product} = req.body;
-    
-    const id = product._id;
 
-    if(!product && !userId){
+
+
+const getProducts= async (userId,database)=>{
+
+    if(!userId){
         return res.status(400).json({status:"EMPTY_BODY"});
     }
 
@@ -99,12 +96,48 @@ const checkProduct=  async (req,res,database)=>{
                 const cart = await result.toArray();
  
                 
-                const products = cart[0].products.filter(function(product){
+                const products = cart[0].products;
+
+                
+                
+                return products;
+                
+            }else{
+                return [];
+            }
+            
+        
+        }catch(err){
+            console.log(err);
+            return res.json({status:"ERROR_WHEN_CHECKING CART"})
+        }
+
+}
+
+
+const checkProduct=  async (req,res,database)=>{
+    const{userId,product} = req.body;
+    
+    const id = product._id;
+
+    if(!product && !userId){
+        return res.status(400).json({status:"EMPTY_BODY"});
+    }
+
+    
+    
+        try{
+             
+            
+                const productArray = await getProducts(userId,database);
+
+                const productsFiltered = productArray.filter(function(product){
                     return product._id===id;
                 })
                 
+              
 
-                if(products[0]){
+                if(productsFiltered[0]){
                     return res.json({isInCart:true});
 
                 }else{
@@ -112,7 +145,7 @@ const checkProduct=  async (req,res,database)=>{
                 }
                 
                 
-            }
+            
             
         
         }catch(err){
@@ -142,5 +175,6 @@ async function checkUser(userId, collection) {
 module.exports = {
     addProduct: addProduct,
     removeProduct:removeProduct,
-    checkProduct:checkProduct
+    checkProduct:checkProduct,
+    getProducts:getProducts
 };

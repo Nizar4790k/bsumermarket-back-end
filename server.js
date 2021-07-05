@@ -55,3 +55,12 @@ app.put('/cart',(req,res)=>{
 app.post('/checkproductcart',(req,res)=>{
     cart.checkProduct(req,res,db)
 })
+
+app.get('/cart/:id',async (req,res)=>{
+    const userId = req.params['id'];
+    
+    const products = await cart.getProducts(userId,db)
+
+     return res.json({products: products});
+
+})
