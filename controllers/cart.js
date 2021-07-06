@@ -214,11 +214,50 @@ const setBougth = async (req,res,database)=>{
 
 }
 
+const deleteAllProducts = async (req,res,database)=>{
+
+    
+    userId = req.body.userId;
+  
+
+    if(!userId){
+        return res.status(400).json({status:"WRONG_BODY"});
+    }
+
+    const { MongoClient, url, dbName } = database;
+    
+    const client = await MongoClient.connect(url, { useNewUrlParser: true })
+        .catch(err => { console.log(err); });
+
+        try{
+            const db = client.db(dbName);
+            let collection = db.collection("cart");
+        
+            var isFound =  await checkUser(userId,collection)
+            let result= null;
+            
+            if(isFound){
+                result = await collection.update({userId:userId},{$set:{products:[]}});
+                
+               return res.json({status:"ALL_PRODUCTS_DELETED_FROM_CART"});
+                
+            }else{
+                return res.json({status:"USER_NOT_FOUND"});
+            }
+        
+        }catch(err){
+            console.log(err);
+            return res.json({status:"ERROR_WHEN_CHECKING CART"})
+        }
+
+}
+
 
 module.exports = {
     addProduct: addProduct,
     removeProduct:removeProduct,
     checkProduct:checkProduct,
     getProducts:getProducts,
-    setBougth:setBougth
+    setBougth:setBougth,
+    deleteAllProducts:deleteAllProducts
 };

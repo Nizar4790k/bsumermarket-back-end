@@ -68,3 +68,7 @@ app.get('/cart/:id',async (req,res)=>{
 app.put('/cart/product',(req,res)=>{
      cart.setBougth(req,res,db);
 })
+
+app.delete('/cart',(req,res)=>{
+    cart.deleteAllProducts(req,res,db);
+})
