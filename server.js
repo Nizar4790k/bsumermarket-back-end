@@ -48,7 +48,7 @@ app.post('/cart',(req,res)=>{
     cart.addProduct(req,res,db)
 })
 
-app.put('/cart',(req,res)=>{
+app.delete('/cart/product',(req,res)=>{
     cart.removeProduct(req,res,db);
 });
 
@@ -63,4 +63,8 @@ app.get('/cart/:id',async (req,res)=>{
 
      return res.json({products: products});
 
+})
+
+app.put('/cart/product',(req,res)=>{
+     cart.setBougth(req,res,db);
 })
