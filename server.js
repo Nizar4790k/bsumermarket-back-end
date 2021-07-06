@@ -6,6 +6,8 @@ const register = require('./controllers/register');
 const products = require('./controllers/products');
 const login = require('./controllers/login');
 const cart = require('./controllers/cart');
+const migrations = require('./database/migrations');
+
 const bcrypt= require('bcrypt');
 const dotenv = require("dotenv");
 dotenv.config()
@@ -15,9 +17,6 @@ app.use(express.json());
 app.use(cors());
 
 
-
-
-app.post
 
 app.listen(process.env.PORT|| 3001,()=>{
     console.log(`Server running on port: ${process.env.PORT || 3001}`);
@@ -30,6 +29,9 @@ const db = {
     url:process.env.MONGODB_URI,// URL at which MongoDB service is running
     dbName:process.env.DB_NAME // A Client to MongoDB
 };
+
+migrations.setMigrations(db);
+
 
 app.post('/register', (req, res) => {
     
